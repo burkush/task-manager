@@ -1,0 +1,613 @@
+$clr-border: rgb(210, 210, 210);
+$clr-light-grey: rgb(235, 235, 235);
+$clr-main-blue: rgb(50, 75, 220);
+$clr-danger-red: rgb(225, 25, 25);
+$clr-light-red: rgb(255, 70, 70);
+$clr-check-green: rgb(30, 220, 30);
+$clr-confirm-message: rgb(255, 255, 230);
+$border-radius: 4px;
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#preloader {
+  position: fixed;
+  z-index: 9999;
+  width: 100%;
+  height: 100vh;
+  background-color: $clr-main-blue;
+  color: $clr-light-grey;
+
+  .preloader-text {
+    text-align: center;
+    margin-top: 100px;
+
+    h2 {
+      margin-bottom: 50px;
+    }
+
+    img {
+      margin-bottom: 10px;
+    }
+
+    p {
+      opacity: 1;
+      animation: fadeInOut;
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+    }
+  }
+}
+
+ul {
+  list-style: none;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.w-limit {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.flex {
+  display: flex;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  pointer-events: none;
+  width: 100px;
+  cursor: auto;
+  background-color: #444;
+  color: $clr-light-grey;
+  text-align: center;
+  border-radius: $border-radius;
+  padding: 5px;
+  transition: visibility 100ms ease-in;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: 50%;
+  margin-left: -50px;
+
+  &::after {
+    content: ' ';
+    position: absolute;
+    left: 51%;
+    top: -8px;
+    transform: translateX(-51%);
+    border-top: none;
+    border-right: 8px solid transparent;
+    border-left: 8px solid transparent;
+    border-bottom: 8px solid #444;
+  }
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
+// HEADER SECTION
+
+.header {
+  margin-bottom: 30px;
+  background-color: rgb(245, 245, 245);
+  padding: 40px 0 30px 0;
+  text-align: center;
+  background: url('../assets/images/background.png');
+  border-bottom: 1px solid $clr-light-grey;
+
+  h1 {
+    font-size: 1.8em;
+    color: $clr-main-blue;
+    margin-bottom: 10px;
+  }
+
+  .description {
+    font-weight: 500;
+    color: rgb(85, 85, 85);
+  }
+}
+
+// FOOTER SECTION
+
+.footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 15px 0;
+  background-color: rgb(20, 20, 20);
+
+  .footer-note {
+    color: lightgrey;
+    font-size: 13px;
+    font-style: italic;
+    a {
+      text-decoration: none;
+      color: $clr-light-grey;
+      font-size: 14px;
+      font-style: normal;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// STATUS MESSAGE
+
+.actions-container {
+  text-align: center;
+  margin-bottom: 30px;
+
+  .status-message {
+    margin-bottom: 30px;
+    color: rgb(50, 50, 50);
+  }
+
+  .add-task-btn {
+    padding: 10px 20px;
+    border-radius: $border-radius;
+    font-size: 15px;
+    background-color: $clr-main-blue;
+    color: $clr-light-grey;
+    transition: opacity 200ms ease-in;
+
+    &:hover,
+    &:focus {
+      opacity: 0.9;
+    }
+  }
+}
+
+// TASK CONTAINER
+
+.task-container {
+  .task {
+    margin-bottom: 50px;
+    position: relative;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid $clr-border;
+    border-radius: $border-radius;
+    box-shadow: 0 0 1px rgba($color: rgb(100, 100, 100), $alpha: 0.5);
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 10px 0 20px;
+    }
+
+    .tags li {
+      font-size: 12px;
+      color: #808080;
+      margin: 3px;
+      list-style: none;
+      border-radius: 5px;
+      background: #f2f2f2;
+      padding: 5px 8px 5px 10px;
+      border: 1px solid #e3e1e1;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    .check-task {
+      width: 1.3rem;
+      aspect-ratio: 1;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .task-text.task-checked {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    // DROPDOWN OPTIONS
+
+    .dropdown {
+      position: relative;
+
+      i {
+        pointer-events: none;
+      }
+
+      &.active-dropdown .dropdown-options {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .dropdown-options {
+        position: absolute;
+        right: -2.1rem;
+        top: calc(100% + 0.25rem);
+        min-width: 100px;
+        background-color: white;
+        z-index: 999;
+        padding: 10px 0;
+        border: 1px solid $clr-light-grey;
+        border-radius: $border-radius;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-10px);
+        transition: transform 150ms ease-out;
+
+        & > ul > li {
+          cursor: pointer;
+
+          &:hover {
+            background-color: $clr-light-grey;
+          }
+
+          button {
+            padding: 10px;
+            text-align: left;
+            font-size: 15px;
+            width: 100%;
+            background-color: transparent;
+          }
+        }
+      }
+    }
+
+    .task-actions {
+      margin-left: auto;
+
+      .btn-container:not(:last-child) {
+        margin: 0 25px;
+      }
+
+      button.dropdown-btn {
+        min-width: 2rem;
+        min-height: 2rem;
+        background-color: transparent;
+        border-radius: 100%;
+        transition: background-color 150ms ease-out;
+
+        &:hover,
+        &:focus {
+          background-color: $clr-light-grey;
+        }
+      }
+
+      i {
+        font-size: 1.25rem;
+      }
+    }
+  }
+}
+
+// MODAL STYLES
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .modal-content {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -25%);
+    overflow: auto;
+    width: 450px;
+    max-width: 90%;
+    padding: 20px 20px 10px;
+    line-height: 1.5;
+    background-color: white;
+    color: rgb(20, 20, 20);
+    border-radius: 6px;
+    animation-name: modalAnimate;
+    animation-duration: 0.3s;
+
+    .modal-header {
+      margin-bottom: 20px;
+
+      .modal-title {
+        font-weight: 500;
+      }
+    }
+
+    .modal-subtitle {
+      font-weight: 500;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .confirm-delete-container {
+      margin-top: 30px;
+      text-align: center;
+
+      & > *.btn {
+        margin: 0 10px;
+        padding: 8px 15px;
+        border-radius: $border-radius;
+        font-size: 15px;
+        transition: opacity 200ms ease-in;
+
+        &:hover,
+        &:focus {
+          opacity: 0.9;
+        }
+      }
+
+      .confirm-delete-btn {
+        background-color: $clr-danger-red;
+        color: $clr-light-grey;
+      }
+    }
+
+    .create-container {
+      text-align: center;
+
+      .add-task-input,
+      .edit-task-input {
+        margin-bottom: 20px;
+        width: 100%;
+        border: none;
+        outline: none;
+        padding: 10px 0;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: border-bottom 100ms ease-out;
+        border-bottom: 1px solid $clr-light-grey;
+
+        &.empty-field {
+          border-bottom: 1px solid $clr-danger-red;
+        }
+      }
+
+      .confirm-add-btn,
+      .confirm-edit-btn {
+        padding: 10px 20px;
+        border-radius: $border-radius;
+        font-size: 15px;
+        background-color: $clr-main-blue;
+        color: $clr-light-grey;
+        transition: opacity 200ms ease-in;
+
+        &:hover,
+        &:focus {
+          opacity: 0.9;
+        }
+      }
+
+      .add-tags-container,
+      .edit-tags-container {
+        margin-bottom: 20px;
+        text-align: left;
+
+        i.fa-tags {
+          font-size: 0.9rem;
+          color: $clr-main-blue;
+        }
+
+        .how-to {
+          margin-bottom: 5px;
+          font-size: 0.85rem;
+          opacity: 0.8;
+        }
+
+        .tags-list,
+        .edit-tags-list {
+          display: flex;
+          flex-wrap: wrap;
+          padding: 7px;
+          margin: 12px 0;
+          border-radius: $border-radius;
+          border: 1px solid lightgrey;
+        }
+
+        .tags-list li,
+        .edit-tags-list li {
+          color: #333;
+          margin: 4px 3px;
+          list-style: none;
+          border-radius: 5px;
+          background: #f2f2f2;
+          padding: 5px 8px 5px 10px;
+          border: 1px solid #e3e1e1;
+        }
+
+        .tags-list li i,
+        .edit-tags-list li i {
+          color: #808080;
+          margin-left: 10px;
+          font-size: 12px;
+          cursor: pointer;
+        }
+
+        .tags-list input,
+        .edit-tags-list input {
+          flex: 1;
+          padding: 5px;
+          border: none;
+          outline: none;
+          font-size: 14px;
+        }
+      }
+    }
+
+    .xmark-btn {
+      border: none;
+      outline: none;
+      background-color: transparent;
+      float: right;
+      cursor: pointer;
+    }
+
+    .fa-xmark {
+      font-size: 1.5em;
+      color: rgb(120, 120, 120);
+    }
+
+    .xmark-btn:hover .fa-xmark,
+    .xmark-btn:focus .fa-xmark {
+      color: rgb(80, 80, 80);
+    }
+  }
+}
+
+.more-options-container {
+  margin-bottom: 20px;
+
+  & > .flex {
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 7px 0;
+    border-bottom: 1px solid $clr-light-grey;
+
+    & > * {
+      margin: 10px;
+      background-color: transparent;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .act-btn {
+      i {
+        pointer-events: none;
+        font-size: 1.1rem;
+        padding: 10px;
+        border-radius: 100%;
+        color: rgb(105, 105, 105);
+        transition: background-color 150ms ease-out;
+
+        &.fa-square-check {
+          color: $clr-check-green;
+        }
+
+        &.fa-trash {
+          color: $clr-light-red;
+        }
+      }
+
+      &:hover > i,
+      &:focus > i {
+        background-color: $clr-light-grey;
+      }
+    }
+
+    select#more-options {
+      padding: 10px 7px;
+      border: 1px solid $clr-border;
+      border-radius: $border-radius;
+      transition: border-color 200ms ease-in-out;
+
+      &:hover,
+      &:focus {
+        border-color: $clr-main-blue;
+      }
+    }
+  }
+}
+
+.delete-message,
+.saved-message,
+.delete-all-message {
+  display: none;
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  padding: 10px;
+  font-size: 14px;
+  background-color: $clr-confirm-message;
+  border: 1px solid lightgray;
+  border-radius: $border-radius;
+  animation-name: popUpMessage;
+  animation-duration: 0.2s;
+}
+
+@keyframes popUpMessage {
+  from {
+    top: -50px;
+  }
+  to {
+    top: 10px;
+  }
+}
+
+@keyframes modalAnimate {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 576px) {
+  body {
+    font-size: 14px;
+  }
+  .task-container {
+    .task {
+      padding: 15px;
+      .task-actions {
+        i {
+          font-size: 1.1rem;
+        }
+      }
+
+      .check-task {
+        width: 1.1rem;
+        margin-right: 10px;
+      }
+    }
+  }
+}
